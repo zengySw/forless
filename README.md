@@ -1,4 +1,4 @@
-# Купоны любви (Next.js + Telegram)
+# Купоны (Next.js + Telegram)
 
 Стек: Next.js (App Router), TypeScript. Уведомления идут в Telegram через бота.
 

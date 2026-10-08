@@ -146,7 +146,7 @@ export default function CouponBoard() {
       <main>
         <header>
           <div className="mascot">🎟️</div>
-          <h1>Купоны любви{name ? ` для ${name}` : ""}</h1>
+          <h1>Купоны{name ? ` для ${name}` : ""}</h1>
           <p className="lead">Стирай защитный слой пальцем и узнавай, что тебе подарили 💖</p>
           <div className="progress">
             <div className="bar">
