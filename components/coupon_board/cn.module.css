@@ -1,0 +1,47 @@
+.board {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.boardBack {
+  display: block;
+  width: max-content;
+  margin: 0 auto 12px;
+  color: var(--pink_d);
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.boardHeader { margin-bottom: 18px; text-align: center; }
+.mascot { display: inline-block; font-size: 64px; animation: bounce 1.4s ease-in-out infinite; transform-origin: bottom; }
+.boardTitle { margin: 6px 0 4px; font-size: 28px; line-height: 1.15; }
+.lead { margin: 0; opacity: .8; }
+.progress { max-width: 260px; margin: 14px auto 0; }
+.bar { height: 10px; overflow: hidden; border-radius: 99px; background: var(--soft); }
+.bar i { display: block; width: 0; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--pink), #ff9bb8); transition: width .5s; }
+.count { margin-top: 6px; font-size: 13px; opacity: .75; }
+.emptyState { margin: 28px 0; padding: 28px 20px; border: 1px solid color-mix(in srgb, var(--pink) 18%, transparent); border-radius: 20px; background: var(--card); text-align: center; }
+
+.finale { display: none; margin-top: 20px; font-size: 18px; font-weight: 800; text-align: center; }
+.finale.on { display: block; animation: finalePop .6s cubic-bezier(.3, 1.6, .5, 1); }
+.reset { display: block; margin: 26px auto 0; padding: 0; border: 0; background: none; color: var(--ink); opacity: .4; font: inherit; font-size: 12px; cursor: pointer; }
+
+.hearts { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.heart { position: absolute; bottom: -40px; opacity: .7; animation: rise linear forwards; }
+.conf { position: fixed; z-index: 20; top: -20px; pointer-events: none; font-size: 24px; animation: fall linear forwards; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  45% { transform: translateY(-12px) scaleY(1.05); }
+  60% { transform: translateY(0) scaleY(.92); }
+}
+@keyframes finalePop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes rise { to { transform: translateY(-110vh) rotate(25deg); opacity: 0; } }
+@keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
+
+@media (min-width: 700px) { .board { padding-top: 40px; } }
+@media (prefers-reduced-motion: reduce) { .mascot, .heart, .conf { animation: none; } }

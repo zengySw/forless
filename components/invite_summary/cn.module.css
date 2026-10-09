@@ -1,0 +1,14 @@
+.card { display: grid; margin: 20px 0 13px; padding: 5px 17px; border: 1px solid color-mix(in srgb, var(--pink) 20%, transparent); border-radius: 20px; background: color-mix(in srgb, var(--pink) 5%, var(--card)); text-align: left; }
+.heading { display: flex; align-items: center; gap: 12px; padding: 13px 0 15px; border-bottom: 1px solid color-mix(in srgb, var(--pink) 15%, transparent); }
+.heading>span { display: grid; width: 39px; height: 39px; flex: 0 0 39px; place-items: center; border-radius: 13px; background: color-mix(in srgb, var(--pink) 13%, var(--card)); font-size: 20px; }
+.heading strong,.heading small,.row small,.row strong { display: block; }
+.heading strong { font-size: 15px; }
+.heading small { margin-top: 3px; font-size: 11px; opacity: .65; }
+.row { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid color-mix(in srgb, var(--pink) 13%, transparent); }
+.row:last-child { border-bottom: 0; }
+.icon { display: grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center; border-radius: 11px; background: color-mix(in srgb, var(--pink) 11%, var(--card)); font-size: 16px; }
+.row>div { min-width: 0; flex: 1; }
+.row small { margin: 1px 0 5px; color: var(--pink_d); font-size: 9px; font-weight: 900; letter-spacing: .12em; }
+.row strong { font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span { padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--pink) 18%, transparent); border-radius: 99px; background: var(--card); font-size: 11px; font-weight: 800; }

@@ -24,8 +24,15 @@ export async function POST(req: Request) {
   const settings = settings_raw as unknown as Settings;
   if (!coupon) return NextResponse.json({ ok: false }, { status: 400 });
 
-  if ((type === "open" && !settings.notify_on_open) || (type === "use" && !settings.notify_on_use)) {
-    return NextResponse.json({ ok: true, skipped: true });
+  const setting_key = type === "open" ? "notify_on_open" : "notify_on_use";
+  if (!settings[setting_key]) {
+    return NextResponse.json({
+      ok: true,
+      sent: false,
+      skipped: true,
+      reason: "notifications_disabled",
+      setting: setting_key,
+    });
   }
 
   // простая защита от частых повторов (в пределах одного инстанса)
@@ -48,13 +55,30 @@ export async function POST(req: Request) {
       : `💝 Использован купон: ${coupon.emoji} ${coupon.title}\n${coupon.text}`;
 
   try {
-    const r = await fetch(`https://api.telegram.org/bot${bot_token}/sendMessage`, {
+    const telegram_response = await fetch(`https://api.telegram.org/bot${bot_token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id, text }),
     });
-    return NextResponse.json({ ok: r.ok }, { status: r.ok ? 200 : 502 });
-  } catch {
+    const telegram_result = await telegram_response.json().catch(() => null);
+    if (!telegram_response.ok || telegram_result?.ok !== true) {
+      const description = typeof telegram_result?.description === "string"
+        ? telegram_result.description
+        : "Telegram rejected the message";
+      console.error("Telegram notification failed:", telegram_response.status, description);
+      return NextResponse.json(
+        { ok: false, sent: false, error: description },
+        { status: 502 },
+      );
+    }
+
+    return NextResponse.json({
+      ok: true,
+      sent: true,
+      message_id: telegram_result.result?.message_id,
+    });
+  } catch (error) {
+    console.error("Telegram notification request failed:", error);
     return NextResponse.json({ ok: false }, { status: 502 });
   }
 }

@@ -1,0 +1,7 @@
+.page { width: min(100% - 32px, 920px); min-height: 100vh; margin: auto; padding: 28px 0 56px; color: var(--ink); }
+.page>header { margin-bottom: 24px; padding: 22px 26px; border: 1px solid color-mix(in srgb,var(--pink) 17%,transparent); border-radius: 22px; background: var(--card); }
+.page h1 { margin: 8px 0; font-size: clamp(26px,4vw,36px); }
+.page button { color: var(--ink); font: inherit; cursor: pointer; }
+.page img { display: block; max-width: 100%; border-radius: 14px; object-fit: cover; }
+.page>div { margin-block: 18px; }
+.page>div>div { padding: 18px; border: 1px solid color-mix(in srgb,var(--pink) 15%,transparent); border-radius: 18px; background: var(--card); }

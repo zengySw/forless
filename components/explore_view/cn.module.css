@@ -1,0 +1,9 @@
+.page { width: min(100% - 32px, 900px); min-height: 100vh; margin: auto; padding: 28px 0 56px; color: var(--ink); }
+.page>header { margin: 0 0 26px; padding: 22px 26px; border: 1px solid color-mix(in srgb,var(--pink) 17%,transparent); border-radius: 22px; background: var(--card); }
+.page h1 { margin: 8px 0; font-size: clamp(26px,4vw,36px); }
+.page p { line-height: 1.6; }
+.page button { color: var(--ink); font: inherit; cursor: pointer; }
+.page>div:first-of-type { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; }
+.page>div:first-of-type button { padding: 10px 14px; border: 1px solid color-mix(in srgb,var(--pink) 20%,transparent); border-radius: 12px; background: var(--card); white-space: nowrap; }
+.page>div:not(:first-of-type)>div { margin: 12px 0; padding: 20px; border: 1px solid color-mix(in srgb,var(--pink) 15%,transparent); border-radius: 18px; background: var(--card); }
+.page a { color: var(--pink_d); font-weight: 800; }

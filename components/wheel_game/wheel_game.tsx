@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import styles from "./cn.module.css";
+import WheelOptionEditor from "@/components/wheel_option_editor/wheel_option_editor";
 
 export type WheelOption = { id: string; label: string; weight: number };
 
 export default function WheelGame({ initialOptions }: { initialOptions: WheelOption[] }) {
   const [wheelOptions, setWheelOptions] = useState(initialOptions);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [result, setResult] = useState<string | null>(null);
@@ -58,12 +59,6 @@ export default function WheelGame({ initialOptions }: { initialOptions: WheelOpt
     ctx.fillText("КРУТИ", center, center + 4);
   }, [wheelOptions]);
 
-  const updateOption = (index: number, patch: Partial<WheelOption>) => {
-    setWheelOptions((items) => items.map((item, i) => i === index ? { ...item, ...patch } : item));
-  };
-
-  const addOption = () => setWheelOptions((items) => [...items, { id: crypto.randomUUID(), label: "Новый вариант", weight: 1 }]);
-
   const spin = () => {
     if (spinning) return;
     setSpinning(true);
@@ -105,40 +100,24 @@ export default function WheelGame({ initialOptions }: { initialOptions: WheelOpt
   };
 
   return (
-    <main className="mini_game">
-      <Link className="mini_game_back" href="/">← К выбору игр</Link>
-      <header className="mini_game_header">
-        <span className="game_eyebrow">ПУСТЬ РЕШИТ СЛУЧАЙ</span>
+    <main className={styles["mini_game"]}>
+      <Link className={styles["mini_game_back"]} href="/">← К выбору игр</Link>
+      <header className={styles["mini_game_header"]}>
+        <span className={styles["game_eyebrow"]}>ПУСТЬ РЕШИТ СЛУЧАЙ</span>
         <h1>Колесо случайностей 🎡</h1>
         <p>Крути колесо и узнай, чем займёмся вместе.</p>
       </header>
-      <section className="mini_game_panel wheel_panel">
-        <div className="wheel_controls">
-          <button className="wheel_edit_toggle" type="button" onClick={() => setSettingsOpen((open) => !open)} aria-expanded={settingsOpen}>
-            {settingsOpen ? "Скрыть настройки" : "⚙️ Настроить варианты"}
-          </button>
-          {settingsOpen && <div className="wheel_editor">
-            <p>Измени список для этого запуска. Вес определяет вероятность: чем он выше, тем чаще выпадает вариант.</p>
-            {wheelOptions.map((option, index) => <div className="wheel_edit_row" key={option.id}>
-              <label className="sr_only" htmlFor={`wheel-label-${option.id}`}>Название варианта {index + 1}</label>
-              <input id={`wheel-label-${option.id}`} value={option.label} maxLength={80} onChange={(event) => updateOption(index, { label: event.target.value })} />
-              <label className="sr_only" htmlFor={`wheel-weight-${option.id}`}>Вес варианта {index + 1}</label>
-              <input id={`wheel-weight-${option.id}`} type="number" min={1} max={100} value={option.weight} onChange={(event) => updateOption(index, { weight: Math.max(1, Math.min(100, Number(event.target.value) || 1)) })} />
-              <button type="button" className="wheel_remove" aria-label={`Удалить ${option.label}`} onClick={() => setWheelOptions((items) => items.filter((_, i) => i !== index))}>×</button>
-            </div>)}
-            <button type="button" className="wheel_add" onClick={addOption}>＋ Добавить вариант</button>
-            {wheelOptions.length < 2 && <span className="wheel_editor_hint">Для вращения нужно хотя бы два варианта.</span>}
-          </div>}
+      <section className={[styles["mini_game_panel"], styles["wheel_panel"]].join(" ")}>
+        <WheelOptionEditor options={wheelOptions} onChange={setWheelOptions} disabled={spinning} />
+        <div className={styles["wheel_wrap"]}>
+          <span className={styles["wheel_pointer"]} aria-hidden="true" />
+          <canvas ref={canvasRef} width={340} height={340} className={styles["wheel_canvas"]} style={{ transform: `rotate(${rotation}deg)` }} aria-label="Колесо вариантов" />
         </div>
-        <div className="wheel_wrap">
-          <span className="wheel_pointer" aria-hidden="true" />
-          <canvas ref={canvasRef} width={340} height={340} className="wheel_canvas" style={{ transform: `rotate(${rotation}deg)` }} aria-label="Колесо вариантов" />
-        </div>
-        <button className="mini_game_primary wheel_button" onClick={spin} disabled={spinning || wheelOptions.length < 2 || wheelOptions.some((item) => !item.label.trim())}>
+        <button className={[styles["mini_game_primary"], styles["wheel_button"]].join(" ")} onClick={spin} disabled={spinning || wheelOptions.length < 2 || wheelOptions.some((item) => !item.label.trim())}>
           {spinning ? "🎡 Крутится…" : "Крутить колесо"}
         </button>
-        {result && <div className="wheel_result" aria-live="polite"><span>Выпало</span><strong>{result}</strong></div>}
-        {history.length > 0 && <div className="wheel_history"><h2>Недавние результаты</h2><div>{history.map((item, index) => <span key={`${item}-${index}`}>{item}</span>)}</div></div>}
+        {result && <div className={styles["wheel_result"]} aria-live="polite"><span>Выпало</span><strong>{result}</strong></div>}
+        {history.length > 0 && <div className={styles["wheel_history"]}><h2>Недавние результаты</h2><div>{history.map((item, index) => <span key={`${item}-${index}`}>{item}</span>)}</div></div>}
       </section>
     </main>
   );

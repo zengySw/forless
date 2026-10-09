@@ -1,0 +1,63 @@
+.page { width: min(100% - 32px, 1040px); min-height: 100vh; margin: 0 auto; padding: 30px 0 56px; color: var(--ink); }
+.back { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px 3px; color: var(--pink_d); font-size: 13px; font-weight: 900; text-decoration: none; transition: transform .18s; }
+.back:hover { transform: translateX(-3px); }
+
+.header { position: relative; overflow: hidden; margin-bottom: 23px; padding: clamp(26px, 5vw, 44px); border: 1px solid color-mix(in srgb, var(--pink) 17%, transparent); border-radius: 28px; background: radial-gradient(circle at 96% 0, color-mix(in srgb, var(--pink) 15%, transparent), transparent 40%), var(--card); box-shadow: 0 18px 44px color-mix(in srgb, var(--pink) 9%, transparent); }
+.heroIcon { display: grid; width: 61px; height: 61px; place-items: center; margin-bottom: 19px; border: 1px solid color-mix(in srgb, var(--pink) 16%, transparent); border-radius: 20px; background: color-mix(in srgb, var(--pink) 10%, var(--card)); font-size: 30px; }
+.eyebrow,.revealLabel { color: var(--pink_d); font-size: 9px; font-weight: 900; letter-spacing: .16em; }
+.header h1 { margin: 9px 0 7px; font-size: clamp(30px, 5vw, 43px); line-height: 1.1; letter-spacing: -.04em; }
+.header>p { max-width: 580px; margin: 0; font-size: 14px; line-height: 1.65; opacity: .75; }
+.progressCard { max-width: 420px; margin-top: 24px; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--pink) 13%, transparent); border-radius: 16px; background: color-mix(in srgb, var(--card) 75%, transparent); }
+.progressTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; font-size: 11px; font-weight: 800; opacity: .82; }
+.progressTop strong { color: var(--pink_d); font-size: 15px; }
+.progressTop small { color: var(--ink); font-size: 11px; opacity: .58; }
+.progressTrack { height: 7px; overflow: hidden; border-radius: 99px; background: color-mix(in srgb, var(--pink) 12%, var(--card)); }
+.progressTrack>span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f47c9e, var(--pink_d)); transition: width .35s ease; }
+
+.secretGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.secretCard { position: relative; display: flex; min-width: 0; flex-direction: column; align-items: stretch; padding: 21px; border: 1px solid color-mix(in srgb, var(--pink) 16%, transparent); border-radius: 21px; background: var(--card); box-shadow: 0 8px 23px color-mix(in srgb, var(--pink) 6%, transparent); transition: transform .2s, border-color .2s, box-shadow .2s; }
+.secretCard:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--pink) 34%, transparent); box-shadow: 0 14px 30px color-mix(in srgb, var(--pink) 11%, transparent); }
+.foundCard { border-color: color-mix(in srgb, #54a878 35%, transparent); }
+.cardTop { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.secretIcon { display: grid; width: 45px; height: 45px; flex: 0 0 45px; place-items: center; border: 1px solid color-mix(in srgb, var(--pink) 14%, transparent); border-radius: 15px; background: color-mix(in srgb, var(--pink) 9%, var(--card)); font-size: 22px; }
+.foundCard .secretIcon { border-color: color-mix(in srgb, #54a878 20%, transparent); background: color-mix(in srgb, #54a878 12%, var(--card)); }
+.foundBadge,.hiddenBadge { padding: 6px 9px; border-radius: 999px; font-size: 10px; font-weight: 900; }
+.foundBadge { background: color-mix(in srgb, #54a878 15%, var(--card)); color: var(--ink); }
+.hiddenBadge { background: color-mix(in srgb, var(--pink) 9%, var(--card)); color: var(--pink_d); }
+.cardNumber { margin-left: auto; color: var(--pink_d); font-size: 10px; font-weight: 900; opacity: .5; }
+.secretCard h2 { margin: 0 0 7px; font-size: 19px; line-height: 1.3; }
+.description { min-height: 42px; margin: 0; font-size: 12px; line-height: 1.65; opacity: .75; }
+.hint { display: flex; gap: 10px; margin-top: 16px; padding: 12px; border: 1px solid color-mix(in srgb, var(--pink) 13%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--pink) 5%, var(--card)); }
+.hint>span { display: grid; width: 27px; height: 27px; flex: 0 0 27px; place-items: center; border-radius: 9px; background: color-mix(in srgb, var(--pink) 12%, var(--card)); color: var(--pink_d); font-size: 16px; }
+.hint p { display: grid; gap: 3px; margin: 0; font-size: 11px; line-height: 1.5; opacity: .82; }
+.hint p strong { color: var(--pink_d); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+.findButton { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 17px; padding: 11px 13px; border: 1px solid color-mix(in srgb, var(--pink) 18%, transparent); border-radius: 12px; background: color-mix(in srgb, var(--pink) 7%, var(--card)); color: var(--pink_d); font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; transition: background .18s, border-color .18s; }
+.findButton:hover { border-color: var(--pink); background: color-mix(in srgb, var(--pink) 14%, var(--card)); }
+.findButton span { font-size: 17px; transition: transform .18s; }
+.findButton:hover span { transform: translateX(3px); }
+.feedbackMessage,.successMessage { margin: 12px 0 0; padding: 9px 11px; border-radius: 11px; font-size: 11px; line-height: 1.5; }
+.feedbackMessage { border: 1px solid color-mix(in srgb, #d27b45 25%, transparent); background: color-mix(in srgb, #d27b45 9%, var(--card)); }
+.successMessage { border: 1px solid color-mix(in srgb, #54a878 24%, transparent); background: color-mix(in srgb, #54a878 10%, var(--card)); }
+.reveal { margin-top: 14px; padding: 13px; border: 1px solid color-mix(in srgb, #54a878 24%, transparent); border-radius: 14px; background: color-mix(in srgb, #54a878 8%, var(--card)); }
+.revealLabel { color: #36875b; font-size: 8px; }
+.reveal p { margin: 6px 0 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+
+.emptyState { display: grid; justify-items: center; padding: 58px 24px; border: 1px dashed color-mix(in srgb, var(--pink) 25%, transparent); border-radius: 22px; background: color-mix(in srgb, var(--card) 70%, transparent); text-align: center; }
+.emptyState>span { font-size: 44px; }
+.emptyState h2 { margin: 12px 0 6px; font-size: 20px; }
+.emptyState p { max-width: 380px; margin: 0; font-size: 13px; line-height: 1.6; opacity: .72; }
+.footerNote { display: flex; justify-content: center; gap: 7px; margin: 24px 0 0; font-size: 11px; text-align: center; opacity: .66; }
+.footerNote span { color: var(--pink_d); font-size: 16px; }
+.back:focus-visible,.findButton:focus-visible { outline: 3px solid var(--pink_d); outline-offset: 3px; }
+
+@media (max-width: 700px) {
+  .page { width: min(100% - 24px, 540px); padding-top: 19px; }
+  .header { padding: 24px 20px; border-radius: 23px; }
+  .secretGrid { grid-template-columns: 1fr; gap: 11px; }
+  .secretCard { padding: 18px; }
+  .description { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back,.secretCard,.findButton,.findButton span,.progressTrack>span { transition: none; }
+}

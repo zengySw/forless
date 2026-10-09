@@ -1,0 +1,70 @@
+:root {
+  --bg1: #ffe3ec;
+  --bg2: #ffc9dc;
+  --card: #fff8fb;
+  --ink: #5a2340;
+  --pink: #ff5c8a;
+  --pink_d: #e0356a;
+  --soft: #ffd1e0;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="dark"] {
+  --bg1: #2a1020;
+  --bg2: #4a1c38;
+  --card: #3a1730;
+  --ink: #ffe3ee;
+  --soft: #6a2a50;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg1: #2a1020;
+    --bg2: #4a1c38;
+    --card: #3a1730;
+    --ink: #ffe3ee;
+    --soft: #6a2a50;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-height: 100%;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background: linear-gradient(160deg, var(--bg1), var(--bg2)) fixed;
+  font-family: "Nunito", "Comfortaa", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--pink_d);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

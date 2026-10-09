@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import styles from "./cn.module.css";
 
 type Point = { x: number; y: number };
 
@@ -81,7 +82,7 @@ export default function ScratchCover({ revealed, on_reveal }: { revealed: boolea
   return (
     <canvas
       ref={canvas_ref}
-      className={`cover${revealed ? " gone" : ""}`}
+      className={[styles["cover"], revealed && styles["gone"]].filter(Boolean).join(" ")}
       role="button"
       tabIndex={revealed ? -1 : 0}
       aria-label="Сотри защитный слой, чтобы открыть купон"

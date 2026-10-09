@@ -1,0 +1,60 @@
+.question { margin: 0 0 19px; font-size: clamp(21px, 5vw, 27px); line-height: 1.32; letter-spacing: -.025em; }
+
+.choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 66px;
+  padding: 13px 14px;
+  border: 1px solid color-mix(in srgb, var(--pink) 17%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--pink) 2%, var(--card));
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 6px #51213b06;
+  transition: transform .16s, border-color .16s, background .16s, opacity .25s, box-shadow .16s;
+}
+.choice:not(:disabled):hover,
+.choice:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--pink);
+  background: color-mix(in srgb, var(--pink) 7%, var(--card));
+  box-shadow: 0 7px 15px color-mix(in srgb, var(--pink) 12%, transparent);
+  outline: none;
+}
+.choice:not(:disabled):active { transform: scale(.98); }
+.choice:disabled { cursor: default; }
+
+.letter {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--pink) 14%, var(--card));
+  color: var(--pink_d);
+  font-size: 12px;
+  font-weight: 900;
+}
+.text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.mark { flex: 0 0 auto; font-size: 18px; font-weight: 900; }
+
+.correct { border-color: var(--quiz-green, #3a9a64); background: color-mix(in srgb, var(--quiz-green, #3a9a64) 17%, var(--card)); animation: pop .4s ease; }
+.correct .letter { background: var(--quiz-green, #3a9a64); color: #fff; }
+.correct .mark { color: var(--quiz-green, #3a9a64); }
+.wrong { border-color: var(--quiz-red, #d9546b); background: color-mix(in srgb, var(--quiz-red, #d9546b) 15%, var(--card)); animation: shake .4s ease; }
+.wrong .letter { background: var(--quiz-red, #d9546b); color: #fff; }
+.wrong .mark { color: var(--quiz-red, #d9546b); }
+.dim { opacity: .72; }
+
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+
+@media (max-width: 480px) { .choices { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .correct, .wrong { animation: none; } }

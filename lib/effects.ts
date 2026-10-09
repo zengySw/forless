@@ -1,6 +1,6 @@
-export function spawn_heart(container: HTMLElement) {
+export function spawn_heart(container: HTMLElement, className = "heart") {
   const h = document.createElement("div");
-  h.className = "heart";
+  h.className = className;
   h.textContent = ["💗", "💖", "💕", "🌸", "✨"][Math.floor(Math.random() * 5)];
   h.style.left = Math.random() * 100 + "vw";
   h.style.fontSize = 14 + Math.random() * 20 + "px";
@@ -9,10 +9,10 @@ export function spawn_heart(container: HTMLElement) {
   setTimeout(() => h.remove(), 11000);
 }
 
-export function burst(x: number, y: number) {
+export function burst(x: number, y: number, className = "pop_out") {
   for (let i = 0; i < 14; i++) {
     const el = document.createElement("div");
-    el.className = "pop_out";
+    el.className = className;
     el.textContent = ["💖", "✨", "💗", "🌸"][i % 4];
     el.style.left = x + "px";
     el.style.top = y + "px";
@@ -23,10 +23,10 @@ export function burst(x: number, y: number) {
   }
 }
 
-export function confetti() {
+export function confetti(className = "conf") {
   for (let i = 0; i < 40; i++) {
     const c = document.createElement("div");
-    c.className = "conf";
+    c.className = className;
     c.textContent = ["🎉", "💖", "✨", "🌸", "💘"][i % 5];
     c.style.left = Math.random() * 100 + "vw";
     c.style.animationDuration = 2 + Math.random() * 2.5 + "s";

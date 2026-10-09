@@ -1,5 +1,5 @@
 import { get_list } from "@/lib/content";
-import WheelGame, { type WheelOption } from "./wheel_game";
+import WheelGame, { type WheelOption } from "@/components/wheel_game/wheel_game";
 
 export const dynamic = "force-dynamic";
 

@@ -268,6 +268,49 @@ export const collections: Collection[] = [
     ],
   },
 
+  // ==================== DATE CHOICE INVITATION ====================
+  {
+    key: "date_choice",
+    title: "Приглашение на свидание",
+    icon: "💌",
+    description: "Текст приглашения и варианты занятий. Каждый вариант укажи с новой строки.",
+    kind: "single",
+    fields: [
+      { key: "title", label: "Вопрос-приглашение", type: "text", max: 120 },
+      { key: "hint", label: "Подпись под вопросом", type: "textarea", max: 240 },
+      { key: "yes_label", label: "Кнопка согласия", type: "text", max: 40 },
+      { key: "no_label", label: "Кнопка отказа", type: "text", max: 40 },
+      { key: "activity_options", label: "Занятия (по одному на строку)", type: "textarea", max: 1200, hint: "Можно добавить эмодзи в конце строки." },
+      { key: "telegram_username", label: "Telegram для ответа (без @, необязательно)", type: "text", max: 40 },
+    ],
+    defaults: {
+      title: "Пойдёшь со мной на свидание?",
+      hint: "Я очень постарался с этим приглашением 🥺",
+      yes_label: "Да 💖",
+      no_label: "Нет",
+      activity_options: "Кино 🎬\nПрогулка 🌳\nКофе и десерты ☕\nНастольные игры 🎲\nПикник 🧺\nВидеоигры 🎮",
+      telegram_username: "",
+    },
+  },
+  {
+    key: "date_choice_responses",
+    title: "Ответы на приглашение",
+    icon: "📨",
+    description: "Ответы и планы, которые отправили со страницы приглашения.",
+    kind: "list",
+    title_key: "submitted_at",
+    fields: [
+      { key: "answer", label: "Ответ", type: "text", max: 20 },
+      { key: "activities", label: "Занятия", type: "textarea", max: 500 },
+      { key: "custom_activity", label: "Свой вариант", type: "text", max: 120 },
+      { key: "date", label: "Дата", type: "date" },
+      { key: "time", label: "Время", type: "text", max: 10 },
+      { key: "place", label: "Место", type: "text", max: 160 },
+      { key: "submitted_at", label: "Отправлено", type: "text", max: 40 },
+    ],
+    defaults: [],
+  },
+
   // ==================== GAME QUESTIONS ====================
   {
     key: "game_questions",

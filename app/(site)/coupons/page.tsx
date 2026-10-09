@@ -1,6 +1,6 @@
 import { get_list, get_single } from "@/lib/content";
 import type { Coupon, Settings } from "@/lib/types";
-import CouponBoard from "@/components/coupon_board";
+import CouponBoard from "@/components/coupon_board/coupon_board";
 
 export const dynamic = "force-dynamic";
 
