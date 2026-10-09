@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import AdminNavigation from "@/components/admin/admin_navigation";
+import AdminNavigation from "@/components/admin_navigation/admin_navigation";
 import { cookie_name, verify_session } from "@/lib/auth";
 import { collections } from "@/lib/schema";
 

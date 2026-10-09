@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { get_collection } from "@/lib/schema";
 import { get_list, get_single } from "@/lib/content";
-import CollectionEditor from "@/components/admin/collection_editor";
+import CollectionEditor from "@/components/collection_editor/collection_editor";
 
 export const dynamic = "force-dynamic";
 

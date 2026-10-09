@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import QuizQuestion from "@/components/quiz_question/quiz_question";
-import { questions, result_tiers } from "./quiz_data";
+import type { Item } from "@/lib/schema";
+import { result_tiers as default_result_tiers, type Question } from "./quiz_data";
 import styles from "./cn.module.css";
 
 const back_href = "/";
@@ -32,7 +33,22 @@ function Confetti() {
   );
 }
 
-export default function QuizPage() {
+export default function QuizPage({ questions: records, settings }: { questions: Item[]; settings: Item }) {
+  const questions: Question[] = records.map((record) => ({
+    question: String(record.question ?? ""),
+    options: [record.option_a, record.option_b, record.option_c, record.option_d].map((value) => String(value ?? "")),
+    answer: Math.max(0, Math.min(3, Number(record.answer ?? 1) - 1)),
+    note: String(record.note ?? ""),
+  }));
+  const result_tiers = default_result_tiers.map((tier, index) => {
+    const prefix = ["perfect", "great", "good", "low"][index];
+    return { ...tier, title: String(settings[`${prefix}_title`] ?? tier.title), text: String(settings[`${prefix}_text`] ?? tier.text) };
+  });
+  const title = String(settings.title ?? "Как хорошо ты меня знаешь?");
+  const subtitle = String(settings.subtitle ?? "");
+  const intro_label = String(settings.intro_label ?? "Маленькая викторина");
+  const correct_message = String(settings.correct_message ?? "В точку! 💗");
+  const incorrect_message = String(settings.incorrect_message ?? "Почти! 🙈");
   const [phase, set_phase] = useState<Phase>("intro");
   const [index, set_index] = useState(0);
   const [picked, set_picked] = useState<(number | null)[]>(() => questions.map(() => null));
@@ -42,9 +58,10 @@ export default function QuizPage() {
   const current = questions[index];
   const selected = picked[index];
   const is_last = index === total - 1;
-  const is_right = selected === current.answer;
+  const is_right = current ? selected === current.answer : false;
   const score = picked.filter((p, i) => p === questions[i].answer).length;
-  const tier = result_tiers.find((t) => score / total >= t.ratio) ?? result_tiers[result_tiers.length - 1];
+  const ratio = total ? score / total : 0;
+  const tier = result_tiers.find((t) => ratio >= t.ratio) ?? result_tiers[result_tiers.length - 1];
 
   const choose = (option: number) => {
     if (phase !== "play" || selected !== null) return;
@@ -84,15 +101,15 @@ export default function QuizPage() {
       {phase === "intro" && (
         <section className={`${styles.panel} ${styles.intro}`}>
           <div className={styles.mascot}>🐻</div>
-          <span className={styles.eyebrow}>Маленькая викторина</span>
-          <h1 className={styles.title}>Хорошо ли ты меня знаешь? 💌</h1>
-          <p className={styles.lead}>{total} вопросов обо мне. Подсказки не работают, я проверял 😏</p>
+          <span className={styles.eyebrow}>{intro_label}</span>
+          <h1 className={styles.title}>{title}</h1>
+          <p className={styles.lead}>{total} вопросов обо мне. {subtitle}</p>
           <ul className={styles.rules}>
             <li>🎯 {total} вопросов</li>
             <li>💗 один ответ верный</li>
             <li>⏱️ без таймера</li>
           </ul>
-          <button type="button" className={styles.primary} onClick={() => set_phase("play")}>
+          <button type="button" className={styles.primary} disabled={!total} onClick={() => set_phase("play")}>
             Начать
           </button>
         </section>
@@ -129,7 +146,7 @@ export default function QuizPage() {
               <div className={`${styles.bubble} ${is_right ? styles.bubble_good : styles.bubble_bad}`} role="status">
                 <span className={styles.bubble_bear}>🐻</span>
                 <p>
-                  <strong>{is_right ? "В точку! 💗" : "Почти! 🙈"}</strong> {current.note}
+                  <strong>{is_right ? correct_message : incorrect_message}</strong> {current.note}
                 </p>
                 <button ref={next_ref} type="button" className={styles.primary} onClick={next}>
                   {is_last ? "Узнать результат" : "Дальше →"}

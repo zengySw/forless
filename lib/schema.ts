@@ -314,24 +314,64 @@ export const collections: Collection[] = [
   // ==================== GAME QUESTIONS ====================
   {
     key: "game_questions",
-    title: "Game Questions",
+    title: "Вопросы викторины",
     icon: "❓",
-    description: "Вопросы и варианты ответов",
+    description: "Вопросы и ответы для игры «Как хорошо ты меня знаешь?».",
     kind: "list",
-    title_key: "game_id",
+    title_key: "question",
     fields: [
-      { key: "game_id", label: "ID игры", type: "text" },
-      { key: "question", label: "Вопрос", type: "textarea" },
-      { key: "image", label: "Изображение", type: "image" },
-      { key: "option_a", label: "Вариант A", type: "text" },
-      { key: "option_b", label: "Вариант B", type: "text" },
-      { key: "option_c", label: "Вариант C", type: "text" },
-      { key: "option_d", label: "Вариант D", type: "text" },
-      { key: "correct_answer", label: "Правильный ответ", type: "text" },
-      { key: "explanation", label: "Пояснение", type: "textarea" },
-      { key: "points", label: "Очки", type: "number", default: 10 },
+      { key: "question", label: "Вопрос", type: "textarea", max: 300 },
+      { key: "option_a", label: "Вариант A", type: "text", max: 100 },
+      { key: "option_b", label: "Вариант B", type: "text", max: 100 },
+      { key: "option_c", label: "Вариант C", type: "text", max: 100 },
+      { key: "option_d", label: "Вариант D", type: "text", max: 100 },
+      { key: "answer", label: "Номер правильного варианта (1–4)", type: "number", min: 1, max: 4, default: 1, hint: "Укажите номер варианта: A — 1, B — 2, C — 3, D — 4." },
+      { key: "note", label: "Комментарий после ответа", type: "textarea", max: 400 },
     ],
-    defaults: [],
+    defaults: [
+      { id: "quiz-1", question: "Какой мой любимый цвет?", option_a: "Красный", option_b: "Синий", option_c: "Зелёный", option_d: "Розовый", answer: 4, note: "Розовый, мой самый любимый цвет! 💗" },
+      { id: "quiz-2", question: "От какого блюда я никогда не откажусь?", option_a: "Пицца", option_b: "Суши", option_c: "Паста", option_d: "Бургер", answer: 1, note: "Пицца — это любовь! 🍕" },
+      { id: "quiz-3", question: "Какой у меня идеальный вечер?", option_a: "Фильм и попкорн", option_b: "Прогулка под звёздами", option_c: "Игры на консоли", option_d: "Чтение книги", answer: 2, note: "Прогулка под звёздами — лучшее! ✨" },
+      { id: "quiz-4", question: "Какую суперспособность я бы выбрал?", option_a: "Читать мысли", option_b: "Телепортироваться", option_c: "Становиться невидимым", option_d: "Находить потерянные вещи", answer: 4, note: "Главный талант — находить всё потерянное! 🔎" },
+      { id: "quiz-5", question: "Какое у меня любимое время года?", option_a: "Весна", option_b: "Лето", option_c: "Осень", option_d: "Зима", answer: 1, note: "Весна — время тепла и новых впечатлений 🌷" },
+    ],
+  },
+  {
+    key: "quiz_settings",
+    title: "Оформление викторины",
+    icon: "💌",
+    description: "Заголовок, описание и тексты итогового экрана игры.",
+    kind: "single",
+    fields: [
+      { key: "title", label: "Заголовок", type: "text", max: 100 },
+      { key: "intro_label", label: "Надпись над заголовком", type: "text", max: 50 },
+      { key: "subtitle", label: "Описание перед началом", type: "textarea", max: 240 },
+      { key: "correct_message", label: "Фраза для правильного ответа", type: "text", max: 80 },
+      { key: "incorrect_message", label: "Фраза для неправильного ответа", type: "text", max: 80 },
+      { key: "perfect_title", label: "Заголовок результата: все ответы верны", type: "text", max: 100 },
+      { key: "perfect_text", label: "Текст результата: все ответы верны", type: "textarea", max: 240 },
+      { key: "great_title", label: "Заголовок результата: почти идеально", type: "text", max: 100 },
+      { key: "great_text", label: "Текст результата: почти идеально", type: "textarea", max: 240 },
+      { key: "good_title", label: "Заголовок результата: больше половины", type: "text", max: 100 },
+      { key: "good_text", label: "Текст результата: больше половины", type: "textarea", max: 240 },
+      { key: "low_title", label: "Заголовок результата: меньше половины", type: "text", max: 100 },
+      { key: "low_text", label: "Текст результата: меньше половины", type: "textarea", max: 240 },
+    ],
+    defaults: {
+      title: "Хорошо ли ты меня знаешь? 💌",
+      intro_label: "Маленькая викторина",
+      subtitle: "Подсказки не работают, я проверял 😏",
+      correct_message: "В точку! 💗",
+      incorrect_message: "Почти! 🙈",
+      perfect_title: "Ты знаешь меня на все сто!",
+      perfect_text: "Ни одной ошибки. Меня, кажется, невозможно удивить.",
+      great_title: "Почти идеально!",
+      great_text: "Всего одна ошибка. Ты меня очень хорошо знаешь.",
+      good_title: "Неплохо!",
+      good_text: "Больше половины верно, но тебе ещё есть что обо мне узнать.",
+      low_title: "Есть куда расти",
+      low_text: "Придётся чаще со мной болтать. Я не против.",
+    },
   },
 
   // ==================== USER GAME ATTEMPTS ====================
@@ -521,6 +561,7 @@ export const photos = collections.find(c => c.key === "photos")!;
 export const albums = collections.find(c => c.key === "albums")!;
 export const games = collections.find(c => c.key === "games")!;
 export const game_questions = collections.find(c => c.key === "game_questions")!;
+export const quiz_settings = collections.find(c => c.key === "quiz_settings")!;
 export const user_game_attempts = collections.find(c => c.key === "user_game_attempts")!;
 export const would_you_rather = collections.find(c => c.key === "would_you_rather")!;
 export const user_would_you_rather = collections.find(c => c.key === "user_would_you_rather")!;
@@ -545,6 +586,7 @@ export const collection_keys = {
   albums,
   games,
   game_questions,
+  quiz_settings,
   user_game_attempts,
   would_you_rather,
   user_would_you_rather,

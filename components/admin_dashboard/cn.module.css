@@ -1,0 +1,10 @@
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin: 0 0 34px; }
+.metric { display: grid; min-height: 120px; align-content: center; gap: 4px; padding: 19px 21px; border: 1px solid var(--line); border-radius: 17px; background: var(--panel); box-shadow: 0 5px 20px rgb(54 31 47 / 3%); }
+.metric > span { color: var(--muted); font-size: 9px; font-weight: 850; letter-spacing: .13em; }
+.metric > strong { font-size: 27px; font-weight: 850; letter-spacing: -.05em; line-height: 1.2; }
+.metric > small { color: var(--muted); font-size: 11px; }
+.metric .storageValue { color: var(--accent-strong); font-size: 18px; letter-spacing: -.025em; }
+.sectionHeading { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+.sectionHeading h2 { margin: 0; font-size: 19px; letter-spacing: -.035em; }
+.sectionHeading > span { padding-bottom: 3px; color: var(--muted); font-size: 11px; }
+@media (max-width: 700px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 25px; } .metric { min-height: 96px; padding: 13px; } .metric > strong { font-size: 23px; } .metric .storageValue { font-size: 14px; } .metric:last-child { grid-column: 1 / -1; } .sectionHeading { align-items: flex-start; flex-direction: column; gap: 5px; } }

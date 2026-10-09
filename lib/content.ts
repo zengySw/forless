@@ -35,6 +35,8 @@ function clean_item(def: Collection, raw: unknown, used_ids: Set<string>): Item 
     out.id = id;
   }
   for (const f of def.fields) {
+    // `id` is also the stable record key used by the admin editor.
+    if (def.kind === "list" && f.key === "id") continue;
     const v = src[f.key];
     switch (f.type) {
       case "number": {
