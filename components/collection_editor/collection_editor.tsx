@@ -13,12 +13,12 @@ function make_item(fields: Field[]): Item {
 }
 function FieldInput({ field, value, onChange }: { field: Field; value: Value | undefined; onChange: (value: Value) => void }) {
   if (field.type === "toggle") return <label className={styles.toggle}><input type="checkbox" checked={Boolean(value)} onChange={(event) => onChange(event.target.checked)} /><span>{field.label}</span></label>;
-  const common = { placeholder: field.placeholder, maxLength: field.max, value: String(value ?? ""), onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value) };
-  if (field.type === "textarea") return <textarea {...common} rows={5} />;
+  const common = { maxLength: field.max, value: String(value ?? ""), onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value) };
+  if (field.type === "textarea") return <textarea placeholder={field.placeholder} {...common} rows={5} />;
   if (field.type === "number") return <input type="number" min={field.min} max={field.max} value={Number(value ?? 0)} onChange={(event) => onChange(event.target.value === "" ? "" : Number(event.target.value))} />;
   if (field.type === "date") return <input type="date" {...common} />;
-  if (field.type === "image") return <div className={styles.imageField}><input type="url" placeholder="https://example.com/image.jpg" {...common} />{typeof value === "string" && value && <img src={value} alt="Предпросмотр изображения" />}</div>;
-  return <input type="text" {...common} />;
+  if (field.type === "image") return <div className={styles.imageField}><input type="url" placeholder={field.placeholder ?? "https://example.com/image.jpg"} {...common} />{typeof value === "string" && value && <img src={value} alt="Предпросмотр изображения" />}</div>;
+  return <input type="text" placeholder={field.placeholder} {...common} />;
 }
 
 export default function CollectionEditor({ collection_key, initial }: { collection_key: string; initial: Item[] | Item }) {
