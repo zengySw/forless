@@ -1,184 +1,190 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { coupons } from "@/lib/coupons";
+import Link from "next/link";
+import type { Coupon, Settings } from "@/lib/types";
 import { burst, confetti, spawn_heart } from "@/lib/effects";
 import ScratchCover from "./scratch_cover";
 
-type Coupon_state = { open?: boolean; uses?: number };
-type Board_state = Record<number, Coupon_state>;
+type CouponState = { open?: boolean; uses?: number };
+type BoardState = Record<string, CouponState>;
 
-const store_key = "love_coupons_v1";
+const storeKey = "love_coupons_v1";
 const pad = (n: number) => String(n).padStart(2, "0");
 
-async function notify(type: "open" | "use", id: number): Promise<boolean> {
+async function notify(type: "open" | "use", id: string): Promise<void> {
   try {
-    const r = await fetch("/api/notify", {
+    await fetch("/api/notify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type, id }),
     });
-    return r.ok;
   } catch {
-    return false;
+    // Coupon actions stay usable when optional notifications are unavailable.
   }
 }
 
 function Ticket({
-  i,
-  st,
-  on_open,
-  on_use,
+  index,
+  coupon,
+  state,
+  onOpen,
+  onUse,
 }: {
-  i: number;
-  st: Coupon_state;
-  on_open: (i: number) => void;
-  on_use: (i: number) => void;
+  index: number;
+  coupon: Coupon;
+  state: CouponState;
+  onOpen: (id: string) => void;
+  onUse: (id: string) => void;
 }) {
-  const ticket_ref = useRef<HTMLElement>(null);
-  const [show_cover, set_show_cover] = useState(!st.open);
-  const [busy, set_busy] = useState(false);
-  const [label, set_label] = useState("Использовать 💝");
-  const c = coupons[i];
-  const uses = st.uses ?? 0;
+  const ticketRef = useRef<HTMLElement>(null);
+  const [showCover, setShowCover] = useState(!state.open);
+  const [busy, setBusy] = useState(false);
+  const [label, setLabel] = useState("Использовать 💝");
+  const uses = state.uses ?? 0;
 
-  const handle_reveal = () => {
-    const r = ticket_ref.current?.getBoundingClientRect();
-    if (r) burst(r.left + r.width / 2, r.top + r.height / 2);
-    on_open(i);
-    setTimeout(() => set_show_cover(false), 600);
+  const handleReveal = () => {
+    const rect = ticketRef.current?.getBoundingClientRect();
+    if (rect) burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    onOpen(coupon.id);
+    void notify("open", coupon.id);
+    window.setTimeout(() => setShowCover(false), 600);
   };
 
-  const handle_use = async () => {
-    if (!st.open || busy) return;
-    set_busy(true);
-    const r = ticket_ref.current?.getBoundingClientRect();
-    if (r) burst(r.left + 60, r.top + r.height / 2);
-    const ok = await notify("use", i);
-    if (ok) {
-      on_use(i);
-      set_label("Отправлено 💌");
-    } else {
-      set_label("Не вышло, попробуй позже");
-    }
-    setTimeout(() => {
-      set_label("Использовать 💝");
-      set_busy(false);
-    }, 2500);
+  const handleUse = () => {
+    if (!state.open || busy) return;
+    setBusy(true);
+    const rect = ticketRef.current?.getBoundingClientRect();
+    if (rect) burst(rect.left + 60, rect.top + rect.height / 2);
+    onUse(coupon.id);
+    setLabel("Купон использован 💌");
+    void notify("use", coupon.id);
+    window.setTimeout(() => {
+      setLabel("Использовать 💝");
+      setBusy(false);
+    }, 2200);
   };
 
   return (
     <div className="ticket_wrap">
       <article
-        ref={ticket_ref}
-        className={`ticket${st.open ? " open" : ""}${uses ? " used" : ""}`}
-        style={{ "--h": c.hue } as React.CSSProperties}
+        ref={ticketRef}
+        className={`ticket${state.open ? " open" : ""}${uses ? " used" : ""}`}
+        style={{ "--h": coupon.hue } as React.CSSProperties}
       >
-        <div className="stub">
-          <span className="num">№{pad(i + 1)}</span>
-          <span className="ico">{st.open ? c.emoji : "❔"}</span>
+        <div className="stub" aria-hidden="true">
+          <span className="num">№{pad(index + 1)}</span>
+          <span className="ico">{state.open ? coupon.emoji : "❔"}</span>
         </div>
         <div className="body">
-          <h2>{c.title}</h2>
-          <p>{c.text}</p>
-          <button className="use_btn" type="button" disabled={busy} onClick={handle_use}>
+          <h2>{coupon.title}</h2>
+          <p>{coupon.text}</p>
+          <button className="use_btn" type="button" disabled={!state.open || busy} onClick={handleUse}>
             {label}
           </button>
-          <span className="stamp">использовано ×{uses}</span>
-          {show_cover && <ScratchCover revealed={!!st.open} on_reveal={handle_reveal} />}
+          {uses > 0 && <span className="stamp">Использовано ×{uses}</span>}
+          {showCover && <ScratchCover revealed={!!state.open} on_reveal={handleReveal} />}
         </div>
       </article>
     </div>
   );
 }
 
-export default function CouponBoard() {
-  const [state, set_state] = useState<Board_state>({});
-  const [loaded, set_loaded] = useState(false);
-  const [name, set_name] = useState("");
-  const [reset_count, set_reset_count] = useState(0);
-  const hearts_ref = useRef<HTMLDivElement>(null);
+export default function CouponBoard({ coupons, settings }: { coupons: Coupon[]; settings: Settings }) {
+  const [state, setState] = useState<BoardState>({});
+  const [loaded, setLoaded] = useState(false);
+  const [resetCount, setResetCount] = useState(0);
+  const heartsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
-      set_state(JSON.parse(localStorage.getItem(store_key) || "{}"));
-    } catch {}
-    set_name(new URLSearchParams(window.location.search).get("name") || "");
-    set_loaded(true);
+      const saved = JSON.parse(localStorage.getItem(storeKey) || "{}");
+      if (saved && typeof saved === "object" && !Array.isArray(saved)) setState(saved);
+    } catch {
+      // Ignore malformed or unavailable browser storage and use an empty board.
+    }
+    setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(store_key, JSON.stringify(state));
-    } catch {}
+      localStorage.setItem(storeKey, JSON.stringify(state));
+    } catch {
+      // The board still works for this visit if browser storage is unavailable.
+    }
   }, [state, loaded]);
 
   useEffect(() => {
-    const el = hearts_ref.current;
-    if (!el) return;
-    const id = setInterval(() => spawn_heart(el), 600);
-    return () => clearInterval(id);
+    const container = heartsRef.current;
+    if (!container) return;
+    const id = window.setInterval(() => spawn_heart(container), 1100);
+    return () => window.clearInterval(id);
   }, []);
 
-  const opened = coupons.filter((_, i) => state[i]?.open).length;
+  const opened = coupons.filter((coupon) => state[coupon.id]?.open).length;
+  const progress = coupons.length ? (opened / coupons.length) * 100 : 0;
 
-  const handle_open = (i: number) => {
-    if (state[i]?.open) return;
-    set_state((prev) => ({ ...prev, [i]: { ...prev[i], open: true } }));
-    notify("open", i);
-    if (opened + 1 === coupons.length) setTimeout(confetti, 500);
+  const handleOpen = (id: string) => {
+    if (state[id]?.open) return;
+    setState((previous) => ({ ...previous, [id]: { ...previous[id], open: true } }));
+    if (opened + 1 === coupons.length && coupons.length > 0) window.setTimeout(confetti, 500);
   };
 
-  const handle_use = (i: number) => {
-    set_state((prev) => ({ ...prev, [i]: { ...prev[i], uses: (prev[i]?.uses ?? 0) + 1 } }));
+  const handleUse = (id: string) => {
+    setState((previous) => ({
+      ...previous,
+      [id]: { ...previous[id], uses: (previous[id]?.uses ?? 0) + 1 },
+    }));
   };
 
-  const handle_reset = () => {
-    if (!window.confirm("Сбросить все купоны?")) return;
-    set_state({});
-    set_reset_count((n) => n + 1);
+  const handleReset = () => {
+    if (!window.confirm("Сбросить все купоны и начать заново?")) return;
+    setState({});
+    setResetCount((count) => count + 1);
   };
 
   return (
     <>
-      <div id="hearts" ref={hearts_ref} />
+      <div id="hearts" ref={heartsRef} aria-hidden="true" />
       <main>
+        <Link className="board_back" href="/">← К выбору игр</Link>
         <header>
-          <div className="mascot">🎟️</div>
-          <h1>Купоны{name ? ` для ${name}` : ""}</h1>
-          <p className="lead">Стирай защитный слой пальцем и узнавай, что тебе подарили 💖</p>
-          <div className="progress">
-            <div className="bar">
-              <i style={{ width: `${(opened / coupons.length) * 100}%` }} />
-            </div>
-            <div id="count">
-              Открыто {opened} из {coupons.length}
-            </div>
+          <div className="mascot" aria-hidden="true">🎟️</div>
+          <h1>
+            {settings.title}
+            {settings.for_whom ? ` для ${settings.for_whom}` : ""}
+          </h1>
+          <p className="lead">{settings.lead}</p>
+          <div className="progress" aria-label={`Открыто купонов: ${opened} из ${coupons.length}`}>
+            <div className="bar"><i style={{ width: `${progress}%` }} /></div>
+            <div id="count">Открыто {opened} из {coupons.length}</div>
           </div>
         </header>
 
-        <section>
-          {loaded &&
-            coupons.map((_, i) => (
+        {coupons.length ? (
+          <section aria-label="Купоны">
+            {loaded && coupons.map((coupon, index) => (
               <Ticket
-                key={`${i}-${reset_count}`}
-                i={i}
-                st={state[i] ?? {}}
-                on_open={handle_open}
-                on_use={handle_use}
+                key={`${coupon.id}-${resetCount}`}
+                index={index}
+                coupon={coupon}
+                state={state[coupon.id] ?? {}}
+                onOpen={handleOpen}
+                onUse={handleUse}
               />
             ))}
-        </section>
+          </section>
+        ) : (
+          <p className="empty_state">Купоны скоро появятся 💌</p>
+        )}
 
-        <div id="finale" className={opened === coupons.length ? "on" : ""}>
+        <div id="finale" className={coupons.length > 0 && opened === coupons.length ? "on" : ""}>
           Ты открыла все купоны! 🥰
           <br />
           Пользуйся ими, когда захочешь 💌
         </div>
-        <button id="reset" type="button" onClick={handle_reset}>
-          сбросить
-        </button>
+        <button id="reset" type="button" onClick={handleReset}>Начать заново</button>
       </main>
     </>
   );

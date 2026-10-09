@@ -4,10 +4,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "check": "npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
-    "next": "^15.1.0",
+    "@upstash/redis": "^1.39.0",
+    "next": "^16.4.0",
+    "pg": "^8.23.1",
+    "process": "^0.11.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

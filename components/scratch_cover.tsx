@@ -82,6 +82,16 @@ export default function ScratchCover({ revealed, on_reveal }: { revealed: boolea
     <canvas
       ref={canvas_ref}
       className={`cover${revealed ? " gone" : ""}`}
+      role="button"
+      tabIndex={revealed ? -1 : 0}
+      aria-label="Сотри защитный слой, чтобы открыть купон"
+      onKeyDown={(e) => {
+        if ((e.key === "Enter" || e.key === " ") && !done.current) {
+          e.preventDefault();
+          done.current = true;
+          on_reveal();
+        }
+      }}
       onPointerDown={(e) => {
         drawing.current = true;
         e.currentTarget.setPointerCapture(e.pointerId);
